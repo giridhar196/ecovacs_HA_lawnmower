@@ -1,0 +1,40 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Ecovacs Open Platform",
+        "description": "Create an API key (AK) at https://open.ecovacs.com (or open.ecovacs.cn for Mainland China), then enter it below.",
+        "data": {
+          "api_key": "API key (AK)",
+          "api_url": "Region",
+          "name": "Name"
+        },
+        "data_description": {
+          "api_key": "Server AK from the Ecovacs Open Platform console",
+          "api_url": "Must match the region where your Ecovacs account lives"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Could not connect. Check the API key and region.",
+      "no_devices": "No robots found for this API key.",
+      "unknown": "Unexpected error"
+    },
+    "abort": {
+      "already_configured": "This API key is already configured"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "mow_status": {
+        "name": "Mow status"
+      },
+      "charge_status": {
+        "name": "Charge status"
+      },
+      "station_status": {
+        "name": "Station status"
+      }
+    }
+  }
+}

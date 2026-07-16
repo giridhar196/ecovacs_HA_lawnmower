@@ -1,0 +1,12 @@
+{
+  "domain": "ecovacs_open",
+  "name": "Ecovacs Open (Lawn Mower)",
+  "codeowners": [],
+  "config_flow": true,
+  "documentation": "https://open.ecovacs.com",
+  "integration_type": "hub",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/ecovacs-ai/ecovacs-mcp/issues",
+  "requirements": ["aiohttp>=3.9.0"],
+  "version": "1.0.0"
+}
