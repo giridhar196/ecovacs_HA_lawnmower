@@ -1,61 +1,47 @@
-# Ecovacs Open Lawn Mower (Home Assistant)
+# Ecovacs Open Lawn Mower
 
-Custom Home Assistant integration for Ecovacs robotic lawn mowers using the official [Ecovacs Open Platform](https://open.ecovacs.com) API.
+[![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://hacs.xyz/)
+[![Open your Home Assistant instance and open this repository inside HACS.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=REPO_OWNER&repository=ha-ecovacs-open&category=integration)
+[![Open your Home Assistant instance and start setting up Ecovacs Open.](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=ecovacs_open)
 
-## Features
+Home Assistant custom integration for Ecovacs robotic lawn mowers using the official [Ecovacs Open Platform](https://open.ecovacs.com) API.
 
-- Config flow with API key (AK) + region
-- Discovers robots bound to your Open Platform account
-- `lawn_mower` entity: start / pause / dock
-- Sensors for raw mow, charge, and station status codes
+## Install (HACS)
 
-## Prerequisites
+1. Make sure [HACS](https://hacs.xyz) is installed.
+2. Click **Add repository to HACS** below (or add this repo manually as category **Integration**):
 
-1. Open [Ecovacs Open Platform](https://open.ecovacs.com) (Mainland China: [open.ecovacs.cn](https://open.ecovacs.cn))
-2. Sign in with your Ecovacs account
-3. Create a server API key (AK)
-4. Authorize the AK for your robot(s)
+   [![Add repository to HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=REPO_OWNER&repository=ha-ecovacs-open&category=integration)
 
-## Install
+3. Search for **Ecovacs Open Lawn Mower** in HACS and install it.
+4. Restart Home Assistant.
+5. Click **Add Integration** below (or Settings → Devices & services → Add integration → **Ecovacs Open**):
 
-### Manual
+   [![Add Integration](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=ecovacs_open)
 
-1. Copy `custom_components/ecovacs_open` into your Home Assistant `config/custom_components/` folder
-2. Restart Home Assistant
-3. **Settings → Devices & services → Add integration → Ecovacs Open (Lawn Mower)**
-4. Enter your AK and region
+6. Enter your Open Platform API key (AK) and region.
 
-### HACS
+## Manual install
 
-Add this repository as a custom integration repository in HACS, install **Ecovacs Open Lawn Mower**, restart, then add the integration from the UI.
+Copy `custom_components/ecovacs_open` into `/config/custom_components/`, restart Home Assistant, then use the Add Integration button above.
 
-## Region
+## Setup
+
+1. Open [Ecovacs Open Platform](https://open.ecovacs.com) (China: [open.ecovacs.cn](https://open.ecovacs.cn))
+2. Create a server API key (AK) and authorize your mower
+3. In Home Assistant, add the integration and paste the AK
 
 | Account region | API URL |
 | --- | --- |
 | Outside Mainland China | `https://open.ecovacs.com` |
 | Mainland China | `https://open.ecovacs.cn` |
 
-## API used
+## Features
 
-Same endpoints as the official Ecovacs MCP server:
-
-| Action | Endpoint | Notes |
-| --- | --- | --- |
-| List robots | `GET /robot/deviceList` | `ak` query param |
-| Control / status | `POST /robot/ctl` | JSON: `ak`, `nickName`, `cmd`, `act` |
-
-Commands:
-
-- Mow start / resume / pause / stop → `cmd=Clean`, `act=s|r|p|h`
-- Dock → `cmd=Charge`, `act=go-start`
-- Status → `cmd=GetWorkState`
-
-## Notes
-
-- The Open Platform API is shared with vacuum robots; mowing maps to the `Clean` command.
-- Some older models return error `5009` for `GetWorkState`. Control may still work; status sensors stay empty.
-- For account-login / MQTT deep integration (maps, zones), use Home Assistant’s built-in [Ecovacs](https://www.home-assistant.io/integrations/ecovacs/) integration instead.
+- Config flow with API key + region
+- Discovers robots on your Open Platform account
+- `lawn_mower` entity: start / pause / dock
+- Sensors for mow, charge, and station status
 
 ## License
 
