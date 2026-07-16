@@ -44,3 +44,11 @@ def test_extract_work_state_nested() -> None:
 def test_device_nickname() -> None:
     assert device_nickname({"nickname": "Front Lawn"}) == "Front Lawn"
     assert device_nickname({"nickName": "Back"}) == "Back"
+    assert device_nickname("Lawn mower") == "Lawn mower"
+
+
+def test_as_device_list_strings() -> None:
+    from custom_components.ecovacs_open.api import _as_device_list
+
+    assert _as_device_list(["Lawn mower"]) == [{"nickname": "Lawn mower"}]
+

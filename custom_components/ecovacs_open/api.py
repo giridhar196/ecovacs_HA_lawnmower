@@ -49,15 +49,22 @@ class EcovacsOpenApi:
         self._api_url = api_url.rstrip("/")
 
     async def async_get_devices(self) -> list[dict[str, Any]]:
-        """Return robots bound to the API key account."""
+        """Return robots bound to the API key account.
+
+        Open Platform may return either nickname strings
+        (``["Lawn mower"]``) or device objects.
+        """
         data = await self._request(ENDPOINT_DEVICE_LIST, method="get")
-        if isinstance(data, list):
-            return data
-        if isinstance(data, dict):
-            for key in ("list", "devices", "robots"):
-                if isinstance(data.get(key), list):
-                    return data[key]
-        return []
+        devices = _as_device_list(data)
+        if devices:
+            return devices
+
+        # Richer fallback used by some Open Platform deployments.
+        try:
+            skill_data = await self._request("robot/skill/deviceList", method="get")
+        except EcovacsOpenApiError:
+            return []
+        return _as_device_list(skill_data)
 
     async def async_get_work_state(self, nickname: str) -> dict[str, Any]:
         """Return work-state payload for a robot nickname."""
@@ -170,13 +177,40 @@ class EcovacsOpenApi:
         return body.get("data", body)
 
 
-def device_nickname(device: dict[str, Any]) -> str:
+def device_nickname(device: str | dict[str, Any]) -> str:
     """Extract a usable nickname from a device-list entry."""
-    for key in ("nickname", "nickName", "nick", "name", "deviceName"):
-        value = device.get(key)
-        if isinstance(value, str) and value.strip():
-            return value.strip()
+    if isinstance(device, str) and device.strip():
+        return device.strip()
+    if isinstance(device, dict):
+        for key in ("nickname", "nickName", "nick", "name", "deviceName"):
+            value = device.get(key)
+            if isinstance(value, str) and value.strip():
+                return value.strip()
     raise EcovacsOpenApiError(f"Device has no nickname: {device!r}")
+
+
+def _as_device_list(data: Any) -> list[dict[str, Any]]:
+    """Normalize device-list payloads into a list of dicts."""
+    raw: list[Any]
+    if isinstance(data, list):
+        raw = data
+    elif isinstance(data, dict):
+        for key in ("list", "devices", "robots", "data"):
+            if isinstance(data.get(key), list):
+                raw = data[key]
+                break
+        else:
+            return []
+    else:
+        return []
+
+    devices: list[dict[str, Any]] = []
+    for item in raw:
+        if isinstance(item, str) and item.strip():
+            devices.append({"nickname": item.strip()})
+        elif isinstance(item, dict):
+            devices.append(item)
+    return devices
 
 
 def _extract_work_state(data: Any) -> dict[str, Any]:
