@@ -1,7 +1,7 @@
 # Ecovacs Open Lawn Mower
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://hacs.xyz/)
-[![Open your Home Assistant instance and open this repository inside HACS.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=REPO_OWNER&repository=ha-ecovacs-open&category=integration)
+[![Open your Home Assistant instance and open this repository inside HACS.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=giridhar196&repository=ecovacs_HA_lawnmower&category=integration)
 [![Open your Home Assistant instance and start setting up Ecovacs Open.](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=ecovacs_open)
 
 Home Assistant custom integration for Ecovacs robotic lawn mowers using the official [Ecovacs Open Platform](https://open.ecovacs.com) API.
@@ -11,7 +11,7 @@ Home Assistant custom integration for Ecovacs robotic lawn mowers using the offi
 1. Make sure [HACS](https://hacs.xyz) is installed.
 2. Click **Add repository to HACS** below (or add this repo manually as category **Integration**):
 
-   [![Add repository to HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=REPO_OWNER&repository=ha-ecovacs-open&category=integration)
+   [![Add repository to HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=giridhar196&repository=ecovacs_HA_lawnmower&category=integration)
 
 3. Search for **Ecovacs Open Lawn Mower** in HACS and install it.
 4. Restart Home Assistant.

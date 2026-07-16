@@ -7,7 +7,7 @@ set -euo pipefail
 #
 # Creates public repo ha-ecovacs-open and pushes this branch.
 
-REPO_NAME="ha-ecovacs-open"
+REPO_NAME="ecovacs_HA_lawnmower"
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 
