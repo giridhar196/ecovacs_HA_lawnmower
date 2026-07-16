@@ -9,13 +9,17 @@ from datetime import timedelta
 
 def _ensure_module(name: str) -> types.ModuleType:
     if name in sys.modules:
-        return sys.modules[name]
-    module = types.ModuleType(name)
-    sys.modules[name] = module
-    parent_name, _, child = name.rpartition(".")
-    if parent_name:
-        parent = _ensure_module(parent_name)
-        setattr(parent, child, module)
+        module = sys.modules[name]
+    else:
+        module = types.ModuleType(name)
+        sys.modules[name] = module
+        parent_name, _, child = name.rpartition(".")
+        if parent_name:
+            parent = _ensure_module(parent_name)
+            setattr(parent, child, module)
+    # Make namespace packages importable as packages
+    if not hasattr(module, "__path__"):
+        module.__path__ = []  # type: ignore[attr-defined]
     return module
 
 
@@ -52,22 +56,52 @@ class _UpdateFailed(Exception):
 class _Platform:
     LAWN_MOWER = "lawn_mower"
     SENSOR = "sensor"
+    NUMBER = "number"
+    SELECT = "select"
+    SWITCH = "switch"
 
 
-async def _async_get_clientsession(hass):
-    return None
+class _ConfigType(dict):
+    pass
 
 
-ha_config_entries = _ensure_module("homeassistant.config_entries")
-ha_core = _ensure_module("homeassistant.core")
-ha_const = _ensure_module("homeassistant.const")
-ha_helpers_update = _ensure_module("homeassistant.helpers.update_coordinator")
-ha_helpers_aiohttp = _ensure_module("homeassistant.helpers.aiohttp_client")
+class _ConfigEntryError(Exception):
+    pass
 
-ha_config_entries.ConfigEntry = _ConfigEntry
-ha_core.HomeAssistant = _HomeAssistant
-ha_helpers_update.DataUpdateCoordinator = _DataUpdateCoordinator
-ha_helpers_update.UpdateFailed = _UpdateFailed
-ha_const.Platform = _Platform
-ha_const.CONF_NAME = "name"
-ha_helpers_aiohttp.async_get_clientsession = _async_get_clientsession
+
+class _ConfigEntryNotReady(Exception):
+    pass
+
+
+for name in (
+    "homeassistant",
+    "homeassistant.config_entries",
+    "homeassistant.core",
+    "homeassistant.const",
+    "homeassistant.exceptions",
+    "homeassistant.helpers",
+    "homeassistant.helpers.update_coordinator",
+    "homeassistant.helpers.aiohttp_client",
+    "homeassistant.helpers.typing",
+    "homeassistant.util",
+):
+    _ensure_module(name)
+
+sys.modules["homeassistant.config_entries"].ConfigEntry = _ConfigEntry
+sys.modules["homeassistant.core"].HomeAssistant = _HomeAssistant
+sys.modules["homeassistant.helpers.update_coordinator"].DataUpdateCoordinator = (
+    _DataUpdateCoordinator
+)
+sys.modules["homeassistant.helpers.update_coordinator"].UpdateFailed = _UpdateFailed
+sys.modules["homeassistant.const"].Platform = _Platform
+sys.modules["homeassistant.const"].CONF_NAME = "name"
+sys.modules["homeassistant.const"].CONF_USERNAME = "username"
+sys.modules["homeassistant.const"].CONF_PASSWORD = "password"
+sys.modules["homeassistant.const"].CONF_COUNTRY = "country"
+sys.modules["homeassistant.helpers.aiohttp_client"].async_get_clientsession = (
+    lambda hass: None
+)
+sys.modules["homeassistant.helpers.typing"].ConfigType = _ConfigType
+sys.modules["homeassistant.exceptions"].ConfigEntryError = _ConfigEntryError
+sys.modules["homeassistant.exceptions"].ConfigEntryNotReady = _ConfigEntryNotReady
+sys.modules["homeassistant.util"].slugify = lambda value: str(value).lower()

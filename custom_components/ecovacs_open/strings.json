@@ -2,38 +2,87 @@
   "config": {
     "step": {
       "user": {
+        "title": "Ecovacs Lawn Mower",
+        "description": "Cloud account mode unlocks zones, edge trim, cut direction, and MQTT status. Open Platform API keys only support basic start/pause/dock.",
+        "data": {
+          "mode": "Connection mode"
+        }
+      },
+      "cloud": {
+        "title": "Ecovacs account",
+        "description": "Use the same email/password/country as the Ecovacs Home app.",
+        "data": {
+          "username": "Email",
+          "password": "Password",
+          "country": "Country",
+          "name": "Name"
+        }
+      },
+      "open": {
         "title": "Ecovacs Open Platform",
-        "description": "Create an API key (AK) at https://open.ecovacs.com (or open.ecovacs.cn for Mainland China), then enter it below.",
+        "description": "Limited mode using an API key from https://open.ecovacs.com",
         "data": {
           "api_key": "API key (AK)",
           "api_url": "Region",
           "name": "Name"
-        },
-        "data_description": {
-          "api_key": "Server AK from the Ecovacs Open Platform console",
-          "api_url": "Must match the region where your Ecovacs account lives"
         }
       }
     },
     "error": {
-      "cannot_connect": "Could not connect. Check the API key and region.",
-      "no_devices": "No robots found for this API key.",
+      "cannot_connect": "Could not connect",
+      "invalid_auth": "Invalid username or password",
+      "no_devices": "No robots found",
       "unknown": "Unexpected error"
     },
     "abort": {
-      "already_configured": "This API key is already configured"
+      "already_configured": "Already configured"
     }
   },
   "entity": {
+    "number": {
+      "cut_direction": { "name": "Cut direction" }
+    },
+    "select": {
+      "mowing_zone": { "name": "Mowing zone" }
+    },
     "sensor": {
-      "mow_status": {
-        "name": "Mow status"
-      },
-      "charge_status": {
-        "name": "Charge status"
-      },
-      "station_status": {
-        "name": "Station status"
+      "battery": { "name": "Battery" },
+      "error": { "name": "Error" },
+      "wifi_rssi": { "name": "Wi-Fi signal" },
+      "mow_status": { "name": "Mow status" },
+      "charge_status": { "name": "Charge status" },
+      "station_status": { "name": "Station status" }
+    },
+    "switch": {
+      "border_switch": { "name": "Edge mowing" },
+      "border_spin": { "name": "Border spin" },
+      "true_detect": { "name": "True detect" },
+      "safe_protect": { "name": "Safe protect" },
+      "child_lock": { "name": "Child lock" }
+    }
+  },
+  "services": {
+    "start_zones": {
+      "name": "Start zone mowing",
+      "description": "Start mowing selected map zones.",
+      "fields": {
+        "device_id": { "name": "Device", "description": "Lawn mower device" },
+        "area_ids": { "name": "Zone IDs", "description": "Comma-separated zone ids" }
+      }
+    },
+    "start_edge_trim": {
+      "name": "Start edge trim",
+      "description": "Start border/edge trimming for zones.",
+      "fields": {
+        "device_id": { "name": "Device", "description": "Lawn mower device" },
+        "area_ids": { "name": "Zone IDs", "description": "Comma-separated zone ids" }
+      }
+    },
+    "refresh_zones": {
+      "name": "Refresh zones",
+      "description": "Request zone list from the mower.",
+      "fields": {
+        "device_id": { "name": "Device", "description": "Lawn mower device" }
       }
     }
   }

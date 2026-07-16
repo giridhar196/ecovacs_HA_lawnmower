@@ -1,0 +1,49 @@
+start_zones:
+  name: Start zone mowing
+  description: Start mowing one or more map zones (spotArea), same idea as the Ecovacs app zone start.
+  fields:
+    device_id:
+      name: Device
+      description: Lawn mower device
+      required: true
+      selector:
+        device:
+          integration: ecovacs_open
+    area_ids:
+      name: Zone IDs
+      description: Comma-separated zone ids from the Ecovacs app map (example 1,2 or 133).
+      required: true
+      example: "1,2"
+      selector:
+        text:
+
+start_edge_trim:
+  name: Start edge trim
+  description: Start border/edge trimming (borderrotate) for the given zones.
+  fields:
+    device_id:
+      name: Device
+      description: Lawn mower device
+      required: true
+      selector:
+        device:
+          integration: ecovacs_open
+    area_ids:
+      name: Zone IDs
+      description: Comma-separated zone ids (example 1,2).
+      required: true
+      example: "1,2"
+      selector:
+        text:
+
+refresh_zones:
+  name: Refresh zones
+  description: Request zone/map set info from the mower (best effort).
+  fields:
+    device_id:
+      name: Device
+      description: Lawn mower device
+      required: true
+      selector:
+        device:
+          integration: ecovacs_open

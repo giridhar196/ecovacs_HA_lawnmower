@@ -1,12 +1,13 @@
 {
   "domain": "ecovacs_open",
-  "name": "Ecovacs Open (Lawn Mower)",
+  "name": "Ecovacs Lawn Mower",
   "codeowners": [],
   "config_flow": true,
-  "documentation": "https://open.ecovacs.com",
+  "documentation": "https://github.com/giridhar196/ecovacs_HA_lawnmower",
   "integration_type": "hub",
-  "iot_class": "cloud_polling",
-  "issue_tracker": "https://github.com/ecovacs-ai/ecovacs-mcp/issues",
-  "requirements": ["aiohttp>=3.9.0"],
-  "version": "1.0.1"
+  "iot_class": "cloud_push",
+  "issue_tracker": "https://github.com/giridhar196/ecovacs_HA_lawnmower/issues",
+  "loggers": ["deebot_client"],
+  "requirements": ["aiohttp>=3.9.0", "deebot-client==11.0.0"],
+  "version": "2.0.0"
 }

@@ -1,47 +1,64 @@
-# Ecovacs Open Lawn Mower
+# Ecovacs Lawn Mower for Home Assistant
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://hacs.xyz/)
 [![Open your Home Assistant instance and open this repository inside HACS.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=giridhar196&repository=ecovacs_HA_lawnmower&category=integration)
 [![Open your Home Assistant instance and start setting up Ecovacs Open.](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=ecovacs_open)
 
-Home Assistant custom integration for Ecovacs robotic lawn mowers using the official [Ecovacs Open Platform](https://open.ecovacs.com) API.
+Custom Home Assistant integration for Ecovacs GOAT lawn mowers.
 
-## Install (HACS)
+## Install
 
-1. Make sure [HACS](https://hacs.xyz) is installed.
-2. Click **Add repository to HACS** below (or add this repo manually as category **Integration**):
+1. HACS → custom repository `https://github.com/giridhar196/ecovacs_HA_lawnmower` (Integration)
+2. Install **Ecovacs Lawn Mower** / **Ecovacs Open Lawn Mower**
+3. Restart Home Assistant
+4. Add integration → **Ecovacs Lawn Mower**
 
-   [![Add repository to HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=giridhar196&repository=ecovacs_HA_lawnmower&category=integration)
+## Connection modes
 
-3. Search for **Ecovacs Open Lawn Mower** in HACS and install it.
-4. Restart Home Assistant.
-5. Click **Add Integration** below (or Settings → Devices & services → Add integration → **Ecovacs Open**):
+### 1) Ecovacs account (recommended — full features)
 
-   [![Add Integration](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=ecovacs_open)
+Uses the same cloud/MQTT path as the Ecovacs app and open-source projects (`deebot-client`).
 
-6. Enter your Open Platform API key (AK) and region.
+Provides:
 
-## Manual install
+- Start / pause / dock mowing
+- Battery, error, Wi-Fi
+- **Cut direction**
+- **Edge mowing** / border switches
+- Services for **zone mowing** and **edge trim**
 
-Copy `custom_components/ecovacs_open` into `/config/custom_components/`, restart Home Assistant, then use the Add Integration button above.
+Login with the same email, password, and country as the Ecovacs Home app.
 
-## Setup
+### 2) Open Platform API key (limited)
 
-1. Open [Ecovacs Open Platform](https://open.ecovacs.com) (China: [open.ecovacs.cn](https://open.ecovacs.cn))
-2. Create a server API key (AK) and authorize your mower
-3. In Home Assistant, add the integration and paste the AK
+Uses [open.ecovacs.com](https://open.ecovacs.com). Only basic start / pause / dock + status. **No zones or trim.**
 
-| Account region | API URL |
+## Zone mowing & edge trim
+
+Developer Tools → Services:
+
+| Service | Purpose |
 | --- | --- |
-| Outside Mainland China | `https://open.ecovacs.com` |
-| Mainland China | `https://open.ecovacs.cn` |
+| `ecovacs_open.start_zones` | Mow zones (`area_ids` like `1,2`) |
+| `ecovacs_open.start_edge_trim` | Border/edge trim for zones |
+| `ecovacs_open.refresh_zones` | Request zone list from mower |
 
-## Features
+Zone IDs match the Ecovacs app map areas.
 
-- Config flow with API key + region
-- Discovers robots on your Open Platform account
-- `lawn_mower` entity: start / pause / dock
-- Sensors for mow, charge, and station status
+Example:
+
+```yaml
+service: ecovacs_open.start_zones
+data:
+  device_id: YOUR_DEVICE_ID
+  area_ids: "1,2"
+```
+
+## Notes
+
+- Open Platform cannot expose zones/trim; that requires account/MQTT (how goat-g1 / deebot-client do it).
+- Some GOAT models need a matching `deebot-client` hardware profile. If your model is unsupported, open an issue with the model name from diagnostics.
+- Unofficial community project; not affiliated with Ecovacs.
 
 ## License
 

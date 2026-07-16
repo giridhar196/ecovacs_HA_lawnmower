@@ -1,5 +1,5 @@
 {
-  "name": "Ecovacs Open Lawn Mower",
+  "name": "Ecovacs Lawn Mower",
   "render_readme": true,
   "homeassistant": "2024.6.0",
   "hacs": "2.0.0"
